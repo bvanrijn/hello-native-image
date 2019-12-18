@@ -2,8 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    container:
-      image: oracle/graalvm-ce:19.3.0
+    container: oracle/graalvm-ce:19.3.0
     steps:
       - uses: actions/checkout@v1
       - name: Install native-image
