@@ -1,0 +1,26 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget build-essential zlib1g-dev
+      - name: Download GraalVM
+        run: |
+          wget -qq https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-19.3.0/graalvm-ce-java11-linux-amd64-19.3.0.tar.gz 
+          sudo tar xf graalvm-ce-java11-linux-amd64-19.3.0.tar.gz -C /usr/local/bin/
+          echo ::set-env name=PATH::/usr/local/bin/graalvm-ce-java11-19.3.0/bin:$PATH
+      - name: Install native-image
+        run: sudo env "PATH=$PATH" gu install native-image
+      - name: Compile Hello.java
+        run: javac Hello.java
+      - name: Create native image
+        run: native-image Hello
+      - name: 🐌🐌🐌
+        run: time java Hello
+      - name: 🚀🚀🚀
+        run: time ./hello
